@@ -22,10 +22,29 @@ public class NoteInteract {
         note3.setTitle("Title3");
         note3.setContent("Content3");
 
+
+        System.out.println("Add note.");
         System.out.println(noteService.add(note1));
         System.out.println(noteService.add(note2));
         System.out.println(noteService.add(note3));
+        System.out.println();
 
+        System.out.println("Get list of notes.");
         noteService.listAll().forEach(System.out::println);
+        System.out.println();
+
+        Note note = noteService.listAll().get(2);
+        note.setTitle("Title updated");
+        note.setContent("Content updated");
+        noteService.update(note);
+
+        System.out.println("Note updated and got by id.");
+        System.out.println(noteService.getById(note.getId()));
+        System.out.println();
+
+        System.out.println("Note deleted.");
+        noteService.deleteById(note.getId());
+        noteService.listAll().forEach(System.out::println);
+
     }
 }
