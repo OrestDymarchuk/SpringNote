@@ -50,7 +50,7 @@ public class NoteService {
     }
 
     public void update(Note note) {
-        Note noteUpdate = noteStorage.mapNotes()
+        noteStorage.mapNotes()
                 .values()
                 .stream()
                 .filter(n -> n.getId() == note.getId())
@@ -59,8 +59,8 @@ public class NoteService {
                     throw new NoSuchElementException("The note is missing.");
                 });
 
-        noteUpdate.setTitle(note.getTitle());
-        noteUpdate.setContent(note.getContent());
+        note.setTitle(note.getTitle());
+        note.setContent(note.getContent());
 
     }
 
