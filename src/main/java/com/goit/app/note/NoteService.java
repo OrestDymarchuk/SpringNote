@@ -13,7 +13,6 @@ public class NoteService {
     }
 
     public Note add(Note note) {
-        Note newNote = new Note();
         long id = new Random()
                 .longs(1, 1000)
                 .findFirst()
@@ -22,13 +21,11 @@ public class NoteService {
         if (noteStorage.listNotes().stream().anyMatch(n -> n.getId() == id)) {
             throw new IllegalArgumentException("The note is already exists.");
         } else {
-            newNote.setId(id);
-            newNote.setTitle(note.getTitle());
-            newNote.setContent(note.getContent());
-            noteStorage.addNote(newNote);
+            note.setId(id);
+            noteStorage.addNote(note);
         }
 
-        return newNote;
+        return note;
     }
 
     public void deleteById(long id) {
