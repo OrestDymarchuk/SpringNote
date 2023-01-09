@@ -2,22 +2,22 @@ package com.goit.app.note;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 public class NoteStorage {
-    private List<Note> notes;
+    private Map<Long,Note> notes;
 
     public NoteStorage() {
-        notes = new ArrayList<>();
+        notes = new HashMap<>();
     }
 
     public void addNote(Note note) {
-        this.notes.add(note);
+        this.notes.put(note.getId(), note);
     }
 
-    public List<Note> listNotes() {
+    public Map<Long,Note> mapNotes() {
         return this.notes;
     }
 
