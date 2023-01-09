@@ -9,7 +9,11 @@ public class NoteService {
     private final NoteStorage noteStorage = new NoteStorage();
 
     public List<Note> listAll() {
-        return noteStorage.listNotes();
+        return noteStorage
+                .getNotes()
+                .values()
+                .stream()
+                .toList();
     }
 
     public Note add(Note note) {
@@ -18,7 +22,11 @@ public class NoteService {
                 .findFirst()
                 .getAsLong();
 
-        if (noteStorage.listNotes().stream().anyMatch(n -> n.getId() == id)) {
+        if (noteStorage
+                .mapNotes()
+                .values()
+                .stream()
+                .anyMatch(n -> n.getId() == id)) {
             throw new IllegalArgumentException("The note is already exists.");
         } else {
             note.setId(id);
@@ -29,7 +37,8 @@ public class NoteService {
     }
 
     public void deleteById(long id) {
-        Note note = noteStorage.listNotes()
+        Note note = noteStorage.mapNotes()
+                .values()
                 .stream()
                 .filter(n -> n.getId() == id)
                 .findAny()
@@ -37,11 +46,12 @@ public class NoteService {
                     throw new NoSuchElementException("The note is missing.");
                 });
 
-        noteStorage.listNotes().remove(note);
+        noteStorage.mapNotes().remove(note.getId());
     }
 
     public void update(Note note) {
-        Note noteUpdate = noteStorage.listNotes()
+        Note noteUpdate = noteStorage.mapNotes()
+                .values()
                 .stream()
                 .filter(n -> n.getId() == note.getId())
                 .findAny()
@@ -55,7 +65,8 @@ public class NoteService {
     }
 
     public Note getById(long id) {
-        return noteStorage.listNotes()
+        return noteStorage.mapNotes()
+                .values()
                 .stream()
                 .filter(n -> n.getId() == id)
                 .findAny()
