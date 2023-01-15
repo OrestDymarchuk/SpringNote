@@ -4,19 +4,17 @@ import com.goit.app.note.Note;
 import com.goit.app.note.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.Map;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @RequestMapping("/note")
 @Controller
 public class NoteController {
     private final NoteService noteService;
+    private Note noteForUpdate = new Note();
 
     @GetMapping("/list")
     public ModelAndView getNotes() {
@@ -50,24 +48,22 @@ public class NoteController {
     }
 
     @GetMapping("/edit")
-    public String editNote() {
+    public String editNote(@RequestParam long id) {
+        noteForUpdate = noteService.getById(id);
+
         return ("note/edit-note");
     }
 
     @PostMapping("/edit")
-    public RedirectView edit(@RequestParam long id,
-                             @RequestParam("title") String title,
+    public RedirectView edit(@RequestParam("title") String title,
                              @RequestParam("content") String content) {
-
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/note/list");
 
-        Note note = noteService.getById(id);
+        noteForUpdate.setTitle(title);
+        noteForUpdate.setContent(content);
 
-        note.setTitle(title);
-        note.setContent(content);
-
-        noteService.update(note);
+        noteService.update(noteForUpdate);
 
         return redirectView;
     }
