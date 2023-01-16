@@ -57,7 +57,7 @@ public class NoteController {
     }
 
     @PostMapping("/edit")
-    public RedirectView edit(Model model, @RequestParam("title") String title,
+    public RedirectView edit(@RequestParam("title") String title,
                              @RequestParam("content") String content) {
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/note/list");
