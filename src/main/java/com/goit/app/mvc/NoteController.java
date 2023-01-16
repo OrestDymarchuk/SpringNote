@@ -16,7 +16,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class NoteController {
     private final NoteService noteService;
-    private Note noteToUpdate;
+//    private Note noteToUpdate;
 
     @GetMapping("/list")
     public ModelAndView getNotes() {
@@ -50,36 +50,41 @@ public class NoteController {
     }
 
     @GetMapping("/edit")
-    public String editNote(Model model, @RequestParam long id) {
-        noteToUpdate = noteService.getById(id);
-        model.addAttribute("note", noteToUpdate);
+    public String editNote(Model model,
+                           @RequestParam long id) {
+        Note note = noteService.getById(id);
+        model.addAttribute("note", note);
         return ("note/edit-note");
     }
 
     @PostMapping("/edit")
-    public RedirectView edit(@RequestParam("title") String title,
+    public RedirectView edit(@ModelAttribute Note note,
+                             Model model,
+                             @RequestParam("title") String title,
                              @RequestParam("content") String content) {
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/note/list");
 
+        Note noteToUpdate = noteService.getById(note.getId());
         noteToUpdate.setTitle(title);
         noteToUpdate.setContent(content);
 
         noteService.update(noteToUpdate);
+        model.addAttribute("note", noteToUpdate);
 
         return redirectView;
     }
 
     //ToDo remove after the project is finished
     @PostConstruct
-    public void ssA(){
+    public void ssA() {
         Note note = new Note();
-        note.setTitle("Title");
-        note.setContent("Content");
+        note.setTitle("TitleTest1");
+        note.setContent("ContentTest1");
 
         Note note1 = new Note();
-        note1.setTitle("Title1");
-        note1.setContent("Content1");
+        note1.setTitle("TitleTest2");
+        note1.setContent("ContentTest2");
 
         noteService.add(note);
         noteService.add(note1);

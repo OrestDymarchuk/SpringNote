@@ -53,7 +53,7 @@ public class NoteService {
         noteStorage.mapNotes()
                 .values()
                 .stream()
-                .filter(n -> n.getId() == note.getId())
+                .filter(n -> Objects.equals(n.getId(), note.getId()))
                 .findAny()
                 .orElseThrow(() -> {
                     throw new NoSuchElementException("The note is missing.");
