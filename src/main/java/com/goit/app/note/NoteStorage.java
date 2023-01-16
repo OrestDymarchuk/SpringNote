@@ -21,4 +21,8 @@ public class NoteStorage {
         return this.notes;
     }
 
+    public Note getNote(long id) {
+        return notes.get(id);
+    }
+
 }
