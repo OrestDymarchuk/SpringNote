@@ -58,20 +58,10 @@ public class NoteController {
     }
 
     @PostMapping("/edit")
-    public RedirectView edit(@ModelAttribute Note note,
-                             Model model,
-                             @RequestParam("title") String title,
-                             @RequestParam("content") String content) {
+    public RedirectView edit(@ModelAttribute Note note) {
+        noteService.update(note);
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/note/list");
-
-        Note noteToUpdate = noteService.getById(note.getId());
-        noteToUpdate.setTitle(title);
-        noteToUpdate.setContent(content);
-
-        noteService.update(noteToUpdate);
-        model.addAttribute("note", noteToUpdate);
-
         return redirectView;
     }
 

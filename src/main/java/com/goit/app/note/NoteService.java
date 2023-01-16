@@ -50,18 +50,10 @@ public class NoteService {
     }
 
     public void update(Note note) {
-        noteStorage.mapNotes()
-                .values()
-                .stream()
-                .filter(n -> Objects.equals(n.getId(), note.getId()))
-                .findAny()
-                .orElseThrow(() -> {
-                    throw new NoSuchElementException("The note is missing.");
-                });
-
-        note.setTitle(note.getTitle());
-        note.setContent(note.getContent());
-
+        if (noteStorage.getNote(note.getId()) == null) {
+            throw new NoSuchElementException("The note is missing.");
+        }
+        noteStorage.addNote(note);
     }
 
     public Note getById(long id) {
