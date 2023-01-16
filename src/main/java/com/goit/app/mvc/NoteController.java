@@ -69,6 +69,8 @@ public class NoteController {
 
         return redirectView;
     }
+
+    //ToDo remove after the project is finished
     @PostConstruct
     public void ssA(){
         Note note = new Note();
