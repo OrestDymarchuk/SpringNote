@@ -16,7 +16,6 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class NoteController {
     private final NoteService noteService;
-//    private Note noteToUpdate;
 
     @GetMapping("/list")
     public ModelAndView getNotes() {
