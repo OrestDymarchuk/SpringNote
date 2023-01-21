@@ -29,12 +29,9 @@ public class NoteController {
     }
 
     @PostMapping("/create")
-    public RedirectView create(@RequestParam("title") String title, @RequestParam("content") String content) {
+    public RedirectView create(@ModelAttribute Note note) {
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/note/list");
-        Note note = new Note();
-        note.setTitle(title);
-        note.setContent(content);
         noteService.add(note);
         return redirectView;
     }
