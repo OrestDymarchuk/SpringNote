@@ -20,26 +20,31 @@ public class NoteService {
     }
 
     public void deleteById(long id) {
-        Optional<Note> note = noteRepository.findById(id);
-        if (note.isEmpty()) {
-            throw new NoSuchElementException("The note is missing");
-        }
+        noteRepository.findById(id)
+                .stream()
+                .findAny()
+                .orElseThrow(() -> {
+                    throw new NoSuchElementException("The note is missing.");
+                });
         noteRepository.deleteById(id);
     }
 
     public void update(Note note) {
-        Optional<Note> notUpdate = noteRepository.findById(note.getId());
-        if (notUpdate.isEmpty()) {
-            throw new NoSuchElementException("The note is missing.");
-        }
+        noteRepository.findById(note.getId())
+                .stream()
+                .findAny()
+                .orElseThrow(() -> {
+                    throw new NoSuchElementException("The note is missing.");
+                });
         noteRepository.save(note);
     }
 
     public Note getById(long id) {
-        Optional<Note> note = noteRepository.findById(id);
-        if (note.isEmpty()) {
-            throw new NoSuchElementException("The note is missing");
-        }
-        return note.get();
+        return noteRepository.findById(id)
+                .stream()
+                .findAny()
+                .orElseThrow(() -> {
+                    throw new NoSuchElementException("The note is missing.");
+                });
     }
 }
