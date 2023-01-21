@@ -2,7 +2,6 @@ package com.goit.app.mvc;
 
 import com.goit.app.note.Note;
 import com.goit.app.note.NoteService;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,24 +59,7 @@ public class NoteController {
     public RedirectView edit(@ModelAttribute Note note) {
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl("/note/list");
-
         noteService.update(note);
-
         return redirectView;
-    }
-
-    //ToDo remove after the project is finished
-    @PostConstruct
-    public void ssA() {
-        Note note = new Note();
-        note.setTitle("TitleTest1");
-        note.setContent("ContentTest1");
-
-        Note note1 = new Note();
-        note1.setTitle("TitleTest2");
-        note1.setContent("ContentTest2");
-
-        noteService.add(note);
-        noteService.add(note1);
     }
 }

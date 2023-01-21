@@ -1,70 +1,45 @@
 package com.goit.app.note;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@RequiredArgsConstructor
 @Service
 public class NoteService {
-    private final NoteStorage noteStorage = new NoteStorage();
+    private final NoteRepository noteRepository;
 
     public List<Note> listAll() {
-        return noteStorage
-                .getNotes()
-                .values()
-                .stream()
-                .toList();
+        return noteRepository.findAll();
     }
 
     public Note add(Note note) {
-        long id = new Random()
-                .longs(1, 1000)
-                .findFirst()
-                .getAsLong();
-
-        if (noteStorage
-                .mapNotes()
-                .values()
-                .stream()
-                .anyMatch(n -> n.getId() == id)) {
-            throw new IllegalArgumentException("The note is already exists.");
-        } else {
-            note.setId(id);
-            noteStorage.addNote(note);
-        }
-
+        noteRepository.save(note);
         return note;
     }
 
     public void deleteById(long id) {
-        Note note = noteStorage.mapNotes()
-                .values()
-                .stream()
-                .filter(n -> n.getId() == id)
-                .findAny()
-                .orElseThrow(() -> {
-                    throw new NoSuchElementException("The note is missing.");
-                });
-
-        noteStorage.mapNotes().remove(note.getId());
+        Optional<Note> note = noteRepository.findById(id);
+        if (note.isEmpty()) {
+            throw new NoSuchElementException("The note is missing");
+        }
+        noteRepository.deleteById(id);
     }
 
     public void update(Note note) {
-        if (noteStorage.getNote(note.getId()) == null) {
+        Optional<Note> notUpdate = noteRepository.findById(note.getId());
+        if (notUpdate.isEmpty()) {
             throw new NoSuchElementException("The note is missing.");
         }
-        noteStorage.addNote(note);
-
+        noteRepository.save(note);
     }
 
     public Note getById(long id) {
-        return noteStorage.mapNotes()
-                .values()
-                .stream()
-                .filter(n -> n.getId() == id)
-                .findAny()
-                .orElseThrow(() -> {
-                    throw new NoSuchElementException("The note is missing");
-                });
+        Optional<Note> note = noteRepository.findById(id);
+        if (note.isEmpty()) {
+            throw new NoSuchElementException("The note is missing");
+        }
+        return note.get();
     }
 }
