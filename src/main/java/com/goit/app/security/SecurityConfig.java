@@ -1,6 +1,7 @@
 package com.goit.app.security;
 
 import com.goit.app.user.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,12 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-    private UserService userService;
-
-    public SecurityConfig(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -35,7 +33,9 @@ public class SecurityConfig {
         return http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/login", "/register").permitAll()
-                .and().formLogin().loginPage("/login")
+                .and()
+                .authorizeHttpRequests().requestMatchers("/**").authenticated()
+                .and().formLogin().loginPage("/login").defaultSuccessUrl("/note/list", true)
                 .and()
                 .build();
     }
